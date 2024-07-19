@@ -1,0 +1,64 @@
+syntax="proto3";
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+option go_package=".;proto";
+option java_package="com.francis.proto";
+
+
+message CpuStat {
+  int32 physicalCores=1;
+  int32 logicalCores = 2;
+  float usedPercent = 3;
+}
+
+message MemoryStat {
+  int64 total = 1;
+  int64 used = 2;
+  float usedPercent = 3;
+}
+
+message DiskStat {
+  int64 total = 1;
+  int64 used = 2;
+  float usedPercent = 3;
+}
+
+message SysStats {
+  string ip = 1;
+  CpuStat cpu = 2;
+  MemoryStat virtualMemory = 3;
+  MemoryStat swapMemory = 4;
+  DiskStat disk = 5;
+  google.protobuf.Timestamp timestamp = 6;
+}
+
+message HostInfo {
+  string ip = 1;
+  string hostName = 2;
+  string upTime = 3;
+  string platform = 4;
+  string platformVersion = 5;
+  string kernelVersion = 6;
+  string kernelArch = 7;
+  repeated CpuInfo cpuInfos = 8;
+  google.protobuf.Timestamp timestamp = 9;
+}
+
+message CpuInfo {
+  int32 num = 1;
+  string vendorId = 2;
+  string family = 3;
+  string physicalId = 4;
+  int32 cores = 5;
+  string modelName = 6;
+  float mhz = 7;
+}
+
+
+
+service sysStatsService {
+  rpc reportSysStats(SysStats) returns (google.protobuf.Empty);
+  rpc reportHostInfo(HostInfo) returns (google.protobuf.Empty);
+}
+
+
